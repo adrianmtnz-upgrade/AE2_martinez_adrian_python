@@ -101,11 +101,15 @@ def calc_pos_coche(pos_coche: int, coche: str) -> int:
 
 def comprobar_ganador() -> str | None:
     """
-    Comprueba si alguno de los coches ha alcanzado la meta.
+    Comprueba si alguno de los coches ha alcanzado la meta o si la han alcanzado ambos y es empate.
 
-    :return: Emoticono del coche ganador o None si no hay ganador
+    :return: Emoticono del coche ganador, empate o None si aun no hay ganador
     """
-    if pos_coche_a >= META : return COCHE_A
+    # Empate
+    if pos_coche_a >= META and pos_coche_b >= META: return "empate"
+    # Gana Coche A
+    elif pos_coche_a >= META : return COCHE_A
+    # Gana Coche B
     elif pos_coche_b >= META : return COCHE_B
 
     return None
@@ -113,13 +117,20 @@ def comprobar_ganador() -> str | None:
 
 def mostrar_ganador(coche_ganador: str) -> None:
     """
-    Muestra por pantalla el coche ganador de la carrera.
+    Muestra por pantalla el coche ganador de la carrera o si ha habido un empate.
 
     :param coche_ganador: Identificador del coche ganador
     :return: None
     """
+    # Si hay un empate
+    if coche_ganador == "empate":
+        print("\n\u001b[33mLa carrera ha terminado en empate\u001b[0m\n")
+        return
+
+    # Si hay un coche ganador
     if coche_ganador == COCHE_A: print("\nEl \u001b[34mCoche A \u001b[0m", end="")
     else: print("\nEl \u001b[31mCoche B \u001b[0m", end="")
+
     print("ha ganado la carrera!\n")
 
 
@@ -189,11 +200,11 @@ while ganador is None:
     # Comprueba si hay ganador
     ganador = comprobar_ganador()
     if ganador is not None:
-        # Si hay ganador lo muestra y termina la carrera
+        # Si hay ganador o empate lo muestra y termina la carrera
         mostrar_ganador(ganador)
         break
 
     else:
-        # Si no hay ganadar sigue pidiendo al usuario que introduzca Enter para avanzar turno
+        # Si no hay ganador sigue pidiendo al usuario que introduzca Enter para avanzar turno
         while not input("\nPulsa Enter para que avance el turno...") == "": print(
         "\u001b[31mTienes que pulsar la tecla enter\u001b[0m")
